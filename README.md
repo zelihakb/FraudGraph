@@ -247,3 +247,8 @@ The project demonstrates how graph-derived behavioral history can complement
 traditional transaction features while maintaining temporal discipline and
 actively testing for synthetic-data leakage.
 
+
+## V2 Development Notes
+
+- [Development progress](docs/v2-progress.md)
+- [Preliminary validation results](docs/v2-validation.md)
