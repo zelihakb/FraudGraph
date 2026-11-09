@@ -1,4 +1,4 @@
-# Graph-Assisted Transaction Fraud Detection
+# FraudGraph
 
 A leakage-aware fraud detection pipeline combining **Neo4j graph features** with
 traditional machine learning on the PaySim transaction dataset.
