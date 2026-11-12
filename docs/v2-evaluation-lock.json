@@ -1,0 +1,45 @@
+{
+  "selection_split": "validation",
+  "primary_metric": "average_precision",
+  "threshold_selection": "maximize_validation_f1",
+  "champion": "rf_tabular",
+  "models": [
+    {
+      "name": "lr_tabular",
+      "artifact": ".local\\v2_models\\logreg_tabular.joblib",
+      "validation_ap": 0.003292596415377839,
+      "validation_f1": 0.012476007677543186,
+      "threshold": 0.012590187777187097
+    },
+    {
+      "name": "lr_graph",
+      "artifact": ".local\\v2_models\\logreg_graph.joblib",
+      "validation_ap": 0.01201963143331807,
+      "validation_f1": 0.03967168262653899,
+      "threshold": 0.05107697342131202
+    },
+    {
+      "name": "rf_tabular",
+      "artifact": ".local\\v2_models\\rf_tabular.joblib",
+      "validation_ap": 0.1587581103537875,
+      "validation_f1": 0.2570162481536189,
+      "threshold": 0.9596291831380864
+    },
+    {
+      "name": "rf_graph",
+      "artifact": ".local\\v2_models\\rf_graph.joblib",
+      "validation_ap": 0.03516892815335558,
+      "validation_f1": 0.0973059911540008,
+      "threshold": 0.9238979867239382
+    },
+    {
+      "name": "rf_graph_only",
+      "artifact": ".local\\v2_models\\rf_graph_only.joblib",
+      "validation_ap": 0.003964128287860668,
+      "validation_f1": 0.009573205346544872,
+      "threshold": 0.7734691202059502
+    }
+  ],
+  "test_threshold_tuning_allowed": false,
+  "test_model_selection_allowed": false
+}
