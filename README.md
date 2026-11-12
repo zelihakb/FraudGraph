@@ -252,3 +252,76 @@ actively testing for synthetic-data leakage.
 
 - [Development progress](docs/v2-progress.md)
 - [Preliminary validation results](docs/v2-validation.md)
+
+## V2.0 | Full-History Fraud Detection
+
+### Overview
+
+V2.0 extends the original fraud detection experiment to 2,770,409
+PaySim transactions while preserving the natural fraud prevalence.
+
+We built a Neo4j transaction graph, extracted temporal receiver-history
+features, and compared conventional transaction features with
+graph-derived features using Logistic Regression and Random Forest.
+
+### Dataset and Temporal Splits
+
+| Split | Time steps | Transactions | Fraud |
+|---|---|---:|---:|
+| Train | 1-322 | 1,938,484 | 3,633 |
+| Validation | 323-376 | 415,628 | 560 |
+| Test | 377-743 | 416,297 | 4,020 |
+
+The chronological boundaries were fixed without using fraud labels
+to determine the splits.
+
+### Graph Feature Engineering
+
+The Neo4j graph follows this structure:
+
+`(Account)-[:SENT]->(Transaction)-[:TO]->(Account)`
+
+Five receiver-history features were extracted using strictly earlier
+transactions (`past.time_step < current.time_step`).
+
+Fraud labels and synthetic account balance fields were excluded
+from feature generation.
+
+### Final Holdout Results
+
+All models were trained on the training split. Model selection and
+decision thresholds were determined using validation data.
+
+| Model | Test AP | Precision | Recall | F1 |
+|---|---:|---:|---:|---:|
+| LR Tabular | 0.0591 | 0.2659 | 0.0488 | 0.0824 |
+| LR Graph-assisted | 0.1577 | 0.6279 | 0.0537 | 0.0990 |
+| RF Tabular | **0.2574** | **0.9655** | 0.1741 | **0.2950** |
+| RF Graph-assisted | 0.2396 | 0.4008 | 0.1955 | 0.2628 |
+| RF Graph-only | 0.0275 | 0.0337 | 0.6741 | 0.0641 |
+
+**Selected model:** Random Forest (Tabular), based on validation AP.
+
+On the untouched test split, the selected model correctly identified
+700 fraudulent transactions with 25 false positives.
+
+### Findings and Limitations
+
+- Graph features improved Logistic Regression Average Precision.
+- Graph-assisted Random Forest achieved higher ROC-AUC but lower AP
+  than tabular-only Random Forest.
+- High precision does not imply high recall: the selected model
+  missed 3,320 fraudulent transactions.
+- Fraud prevalence differs considerably between temporal splits.
+- The dataset is synthetic, and class-weighted model scores
+  should not be assumed to be calibrated fraud probabilities.
+- The primary model-selection metric was formalized after reviewing
+  validation results, not preregistered.
+
+### Technical Documentation
+
+- [Temporal prevalence analysis](docs/v2-temporal-prevalence.md)
+- [Graph feature definitions](docs/v2-graph-features.md)
+- [Model selection protocol](docs/v2-model-selection.md)
+- [Final holdout evaluation](docs/v2-final-test.md)
+- [Reproduction commands](docs/v2-run-commands.md)
